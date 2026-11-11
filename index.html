@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>CV Oluşturucu</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 3.5h8l4 4V20a.5.5 0 0 1-.5.5h-11A.5.5 0 0 1 6 20z"/><path d="M14 3.5V8h4M9 12h6m-6 4h6"/></svg></span>
+      <div><h1>CV Stüdyo</h1><p>Özgeçmiş oluşturucu</p></div>
+    </div>
+    <div class="toolbar" aria-label="Dosya işlemleri">
+      <span id="saveStatus" class="save-status" role="status">Yerel taslak</span>
+      <button type="button" class="button button-ghost" popovertarget="fileActions">Dosya <span aria-hidden="true">⌄</span></button>
+      <div id="fileActions" popover class="file-actions" aria-label="Dosya seçenekleri">
+        <button type="button" id="newButton">Yeni boş CV</button>
+        <button type="button" id="exampleButton">Örnek CV yükle</button>
+        <hr>
+        <button type="button" id="saveButton">Taslağı kaydet</button>
+        <button type="button" id="exportJsonButton">JSON indir</button>
+        <button type="button" id="importJsonButton">JSON aç</button>
+      </div>
+      <input type="file" id="importJsonInput" accept="application/json,.json" hidden>
+      <button type="button" class="button button-primary" id="printButton"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF oluştur</button>
+    </div>
+  </header>
+
+  <div class="mobile-views" role="group" aria-label="Çalışma görünümü">
+    <button type="button" data-view="editor" aria-controls="editingArea" aria-pressed="true">Düzenle</button>
+    <button type="button" data-view="preview" aria-controls="previewArea" aria-pressed="false">Önizleme</button>
+  </div>
+  <main class="app-layout" data-mobile-view="editor">
+    <div class="editing-area" id="editingArea">
+      <nav class="section-nav" aria-label="CV bölümleri">
+        <p class="nav-label">İÇERİK</p>
+        <button type="button" aria-controls="personalPanel" aria-current="true"><span aria-hidden="true">01</span>Kişisel bilgiler</button>
+        <button type="button" aria-controls="summaryPanel"><span aria-hidden="true">02</span>Hakkımda</button>
+        <button type="button" aria-controls="experiencePanel"><span aria-hidden="true">03</span>Deneyim</button>
+        <button type="button" aria-controls="educationPanel"><span aria-hidden="true">04</span>Eğitim</button>
+        <button type="button" aria-controls="skillsPanel"><span aria-hidden="true">05</span>Yetkinlikler</button>
+        <button type="button" aria-controls="trainingPanel"><span aria-hidden="true">06</span>Sertifika ve dil</button>
+        <p class="nav-label nav-settings">SAYFA</p>
+        <button type="button" aria-controls="settingsPanel"><span aria-hidden="true">↔</span>Görünüm</button>
+      </nav>
+      <aside class="editor-panel" aria-label="CV düzenleme alanı">
+
+      <section class="editor-section" id="personalPanel" aria-labelledby="personalHeading">
+        <h2 id="personalHeading" tabindex="-1">Kişisel bilgiler</h2>
+        <p class="section-description">CV’nin üst kısmında görünen iletişim ve profil bilgileri.</p>
+        <div class="form-grid two-columns">
+          <label>Ad soyad<input data-path="personal.name" placeholder="Ad Soyad"></label>
+          <label>Unvan<input data-path="personal.title" placeholder="Yazılım Destek Analisti"></label>
+          <label class="full-width">Uzmanlık satırı<input data-path="personal.tagline" placeholder="Uygulama Desteği | Sistem Yönetimi | Otomasyon"></label>
+          <label>E-posta<input data-path="personal.email" type="email" placeholder="ad@eposta.com"></label>
+          <label>Telefon<input data-path="personal.phone" placeholder="+90 5xx xxx xx xx"></label>
+          <label>LinkedIn<input data-path="personal.linkedin" placeholder="linkedin.com/in/kullanici"></label>
+          <label>Konum<input data-path="personal.location" placeholder="İstanbul, Türkiye"></label>
+          <label class="full-width">PDF dosya adı<input data-path="meta.fileName" placeholder="Ad_Soyad_CV"></label>
+          <label class="full-width file-drop">
+            Profil fotoğrafı
+            <input type="file" id="photoInput" accept="image/png,image/jpeg,image/webp">
+            <span>Fotoğraf tarayıcı içinde küçültülerek taslağa eklenir.</span>
+          </label>
+          <div class="full-width inline-actions">
+            <button type="button" class="mini-button" id="removePhotoButton">Fotoğrafı kaldır</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="editor-section" id="summaryPanel" aria-labelledby="summaryHeading" hidden>
+        <h2 id="summaryHeading" tabindex="-1">Hakkımda</h2>
+        <p class="section-description">Deneyimini ve çalışma alanlarını birkaç cümleyle anlat.</p>
+        <label>
+          Hakkımda
+          <textarea data-path="summary" rows="6" placeholder="Kısa, teknik ve ölçülebilir bir profesyonel özet yazın."></textarea>
+        </label>
+      </section>
+
+      <section class="editor-section" id="experiencePanel" aria-labelledby="experienceHeading" hidden>
+        <h2 id="experienceHeading" tabindex="-1">Deneyim</h2>
+        <p class="section-description">Rollerini, sorumluluklarını ve somut sonuçlarını ekle.</p>
+        <div id="experienceEditor" class="stack-list"></div>
+        <button type="button" class="add-button" id="addExperienceButton">+ Deneyim ekle</button>
+      </section>
+
+      <section class="editor-section" id="educationPanel" aria-labelledby="educationHeading" hidden>
+        <h2 id="educationHeading" tabindex="-1">Eğitim</h2>
+        <p class="section-description">Okul, program, derece ve tarih bilgilerini ekle.</p>
+        <div id="educationEditor" class="stack-list"></div>
+        <button type="button" class="add-button" id="addEducationButton">+ Eğitim ekle</button>
+      </section>
+
+      <section class="editor-section" id="skillsPanel" aria-labelledby="skillsHeading" hidden>
+        <h2 id="skillsHeading" tabindex="-1">Teknik yetkinlikler</h2>
+        <p class="section-description">Araçları ve teknolojileri çalışma alanlarına göre grupla.</p>
+        <div id="skillEditor" class="stack-list"></div>
+        <button type="button" class="add-button" id="addSkillButton">+ Yetkinlik grubu ekle</button>
+      </section>
+
+      <section class="editor-section" id="trainingPanel" aria-labelledby="trainingHeading" hidden>
+        <h2 id="trainingHeading" tabindex="-1">Sertifika ve dil</h2>
+        <p class="section-description">Tamamladığın eğitimleri ve yabancı dil seviyeni yaz.</p>
+        <div id="certificateEditor" class="stack-list"></div>
+        <button type="button" class="add-button" id="addCertificateButton">+ Eğitim veya sertifika ekle</button>
+        <label class="top-gap">
+          Yabancı dil
+          <input data-path="language" placeholder="İngilizce: Orta seviye. Teknik doküman okuma, yazışma ve konuşma.">
+        </label>
+      </section>
+
+      <section class="editor-section" id="settingsPanel" aria-labelledby="settingsHeading" hidden>
+        <h2 id="settingsHeading" tabindex="-1">Sayfa görünümü</h2>
+        <p class="section-description">A4 çıktısının tipografisini ve boşluklarını ayarla.</p>
+        <div class="settings-grid">
+          <label>
+            Yazı tipi
+            <select data-path="settings.fontFamily">
+              <option value="Arial, Helvetica, sans-serif">Arial</option>
+              <option value="Calibri, Arial, sans-serif">Calibri</option>
+              <option value="'Segoe UI', Arial, sans-serif">Segoe UI</option>
+              <option value="Georgia, serif">Georgia</option>
+            </select>
+          </label>
+          <label>
+            Sayfa kenarı <output id="marginOutput"></output>
+            <input data-path="settings.margin" type="range" min="8" max="18" step="0.5">
+          </label>
+          <label>
+            Metin boyutu <output id="fontSizeOutput"></output>
+            <input data-path="settings.bodySize" type="range" min="7.5" max="11" step="0.1">
+          </label>
+          <label>
+            Satır aralığı <output id="lineHeightOutput"></output>
+            <input data-path="settings.lineHeight" type="range" min="1.1" max="1.55" step="0.01">
+          </label>
+          <label>
+            Bölüm aralığı <output id="sectionGapOutput"></output>
+            <input data-path="settings.sectionGap" type="range" min="3" max="11" step="0.5">
+          </label>
+          <label>
+            Fotoğraf köşesi <output id="photoRadiusOutput"></output>
+            <input data-path="settings.photoRadius" type="range" min="0" max="28" step="1">
+          </label>
+          <label>
+            Vurgu rengi
+            <input data-path="settings.accent" type="color">
+          </label>
+        </div>
+        <div class="inline-actions top-gap">
+          <button type="button" class="mini-button" id="resetSettingsButton">Ayarları sıfırla</button>
+        </div>
+        <p class="hint">PDF penceresinde hedef olarak “PDF olarak kaydet”, kağıt boyutu olarak A4 ve ölçek olarak %100 seçin.</p>
+      </section>
+      </aside>
+    </div>
+
+    <section class="preview-panel" id="previewArea" aria-label="Canlı CV önizlemesi">
+      <div class="preview-toolbar">
+        <div class="preview-title"><strong>Canlı önizleme</strong><span class="paper-tag">A4</span></div>
+        <div class="preview-actions">
+          <span id="overflowBadge" class="badge" role="status">Kontrol ediliyor</span>
+          <button type="button" class="mini-button" id="fitButton">Tek sayfaya sığdır</button>
+          <button type="button" class="mini-button zoom-button" id="zoomButton" aria-pressed="false" title="Gerçek boyut ve pencereye sığdır arasında geçiş yap">Yakınlaştır</button>
+        </div>
+      </div>
+      <div class="page-stage">
+        <article id="resumePage" class="resume-page"></article>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
